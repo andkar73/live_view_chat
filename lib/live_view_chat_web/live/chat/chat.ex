@@ -3,21 +3,23 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   alias LiveViewChat.Chat
   alias LiveViewChat.Chat.ChatPost
   alias LiveViewChatWeb.ChatView
-  alias LiveViewChatWeb.Router.Helpers, as: Routes
+  @topic "chat"
 
   def mount(_session, socket) do
-    IO.puts("--mount--")
+    LiveViewChatWeb.Endpoint.subscribe(@topic)
     changeset = Chat.change_chat_post(%ChatPost{})
     socket = assign(socket, changeset: changeset, chat_posts: [])
    {:ok, socket, temporary_assigns: [chat_posts: []]}
   end
 
-  def handle_event("create", %{"chat_post" => chat_post} = attr, socket) do
-    IO.puts("--send--")
-    IO.inspect(attr)
-    id = random_string
+  def handle_event("create", %{"chat_post" => chat_post}, socket) do
+    id = random_string()
+    LiveViewChatWeb.Endpoint.broadcast_from(self(), @topic, "create", %{chat_post: chat_post, id: id})
     {:noreply, assign(socket, chat_posts: [chat_post], id: id)}
+  end
 
+  def handle_info(%{ event: "create", payload: %{chat_post: chat_post, id: id}}, socket) do
+    {:noreply, assign(socket, chat_posts: [chat_post], id: id)}
   end
 
   def render(assigns) do

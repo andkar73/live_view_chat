@@ -3,6 +3,7 @@ defmodule LiveViewChat.Chat do
   alias  LiveViewChat.Repo
   import Ecto.Query
 
+
   @doc """
   Create a changeset to change a chat_post
   """
