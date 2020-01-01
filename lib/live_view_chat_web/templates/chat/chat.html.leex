@@ -1,0 +1,20 @@
+<h2>Chat</h2>
+<%= f = form_for @changeset, "#", [phx_submit: :create, id: "chat-input"] %>
+    <fieldset>
+        <%= label f, :chat_post, for: "chatPost" %>
+        <%= text_input f, :chat_post, id: "chatPost"  %>
+        <div>
+            <%= submit "Create", phx_disable_with: "Sending..."%>
+        </div>
+    </fieldset>
+</form>
+
+<table>
+   <tbody phx-update="append" id="chat">
+       <%= for chat_post <- @chat_posts do %>
+           <tr id="<%= @id %>">
+             <th><%= chat_post["chat_post"] %></th>
+           </tr>
+       <% end %>
+   </tbody>
+</table>
