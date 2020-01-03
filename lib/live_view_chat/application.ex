@@ -11,9 +11,10 @@ defmodule LiveViewChat.Application do
       # Start the Ecto repository
       LiveViewChat.Repo,
       # Start the endpoint when the application starts
-      LiveViewChatWeb.Endpoint
+      LiveViewChatWeb.Endpoint,
       # Starts a worker by calling: LiveViewChat.Worker.start_link(arg)
       # {LiveViewChat.Worker, arg},
+      LiveViewChatWeb.Presence
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

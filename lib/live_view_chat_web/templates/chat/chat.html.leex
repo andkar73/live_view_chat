@@ -1,4 +1,6 @@
 <h2>Chat</h2>
+
+<p>Number of users: <%= if assigns[:number_of_users] do %> <%= @number_of_users %> <% end %></p>
 <%= f = form_for @changeset, "#", [phx_submit: :create, id: "chat-input"] %>
     <fieldset>
         <%= label f, :chat_post, for: "chatPost" %>
