@@ -2,3 +2,38 @@
 
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
+
+
+.chat-page {
+    display: grid;
+    grid-template-rows:minmax(40px,auto) auto 50px;
+    grid-template-columns: 1fr;
+    grid-row-gap: 10px;
+}
+
+.chat {
+    border: black solid 1px;
+    background-color: black;
+    color: white;
+    font-family: "Comic Sans MS";
+    padding: 10px;
+}
+
+.chat-form form {
+    margin: 0;
+}
+.chat-input {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    grid-column-gap: 10px;
+}
+.chat-input #chatPost {
+    margin: 0;
+    border-radius: 0;
+}
+.chat-input button {
+    background-color: black;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+}
