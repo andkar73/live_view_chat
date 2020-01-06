@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :live_view_chat, LiveViewChat.Repo,
-  username: "andkar",
-  password: "",
+  username: "vagrant",
+  password: "rasputin",
   database: "live_view_chat_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
