@@ -18,5 +18,6 @@ import LiveSocket from "phoenix_live_view"
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
 
-let liveSocket = new LiveSocket("/live", Socket)
+let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}});
 liveSocket.connect()

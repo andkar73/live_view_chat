@@ -6,7 +6,7 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   alias LiveViewChatWeb.Presence
   @topic "chat"
 
-  def mount(_session, socket) do
+  def mount(_params, _session, socket) do
     Presence.track(self(), @topic, "user", %{online_at: inspect(System.system_time(:second))})
     LiveViewChatWeb.Endpoint.subscribe(@topic)
     changeset = Chat.change_chat_post(%ChatPost{})
@@ -28,7 +28,7 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
     {:noreply, assign(socket, number_of_users: Chat.number_of_users(@topic))}
   end
 
-  def handle_info(%{ event: "create", payload: %{chat_post: chat_post, id: id}}, socket) do
+  def handle_info(%{topic: "chat", payload: %{chat_post: chat_post, id: id}}, socket) do
     {:noreply, assign(socket, chat_posts: [chat_post], id: id)}
   end
 

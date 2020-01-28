@@ -1,7 +1,14 @@
 defmodule LiveViewChatWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :live_view_chat
 
-  socket "/live", Phoenix.LiveView.Socket
+  @session_options [
+    store: :cookie,
+    key: "_live_view_chat_key",
+    signing_salt: "ek2XX9RI"
+  ]
+
+  socket "/live", Phoenix.LiveView.Socket,
+         websocket: [connect_info: [session: @session_options]]
   socket "/socket", LiveViewChatWeb.UserSocket,
     websocket: true,
     longpoll: false
@@ -38,10 +45,6 @@ defmodule LiveViewChatWeb.Endpoint do
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
-  plug Plug.Session,
-    store: :cookie,
-    key: "_live_view_chat_key",
-    signing_salt: "ek2XX9RI"
-
+  plug Plug.Session, @session_options
   plug LiveViewChatWeb.Router
 end

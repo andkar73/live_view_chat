@@ -2,7 +2,7 @@ use Mix.Config
 
 # Configure your database
 config :live_view_chat, LiveViewChat.Repo,
-  username: "",
+  username: "andkar",
   password: "",
   database: "live_view_chat_dev",
   hostname: "localhost",
