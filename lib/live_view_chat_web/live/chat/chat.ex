@@ -18,16 +18,20 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
     ChatView.render("chat.html", assigns)
   end
 
+  # Event handler for Live View
   def handle_event("create", %{"chat_post" => chat_post}, socket) do
     id = Chat.random_string()
     LiveViewChatWeb.Endpoint.broadcast_from(self(), @topic, "create", %{chat_post: chat_post, id: id})
     {:noreply, assign(socket, chat_posts: [chat_post], id: id)}
   end
 
+  # Event handler for Presence.
   def handle_info(%{event: "presence_diff", payload: _payload}, socket) do
+    IO.puts("--diff--")
     {:noreply, assign(socket, number_of_users: Chat.number_of_users(@topic))}
   end
 
+  # Event handler for PubSub broadcast_from.
   def handle_info(%{topic: "chat", payload: %{chat_post: chat_post, id: id}}, socket) do
     {:noreply, assign(socket, chat_posts: [chat_post], id: id)}
   end
