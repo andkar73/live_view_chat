@@ -13,9 +13,8 @@ defmodule LiveViewChat.Chat do
   Create a random string containing letters and numbers.
   Returns a string
   """
-  def random_string do
+  def random_string(length) do
     alphabet = Enum.to_list(?a..?z) ++ Enum.to_list(?0..?9)
-    length = 12
     for _ <- 1..length, into: "", do: << Enum.random(alphabet) >>
   end
 

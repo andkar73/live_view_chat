@@ -6,8 +6,8 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   alias LiveViewChatWeb.Presence
   @topic "chat"
 
-  def mount(_params, %{"_csrf_token" => token} = _session, socket) do
-    user = "User-" <> String.slice(token, 0..3)
+  def mount(_params, _session, socket) do
+    user = "User-"<>Chat.random_string(4)
 
     Presence.track(self(), @topic, user, %{online_at: inspect(System.system_time(:second))})
 
@@ -24,7 +24,7 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
 
   # Event handler for Live View
   def handle_event("create", %{"chat_post" => chat_post}, socket) do
-    id = Chat.random_string()
+    id = Chat.random_string(12)
     chat_post = Map.replace!(chat_post, "chat_post", chat_post["user"]<>": "<>chat_post["chat_post"])
 
     LiveViewChatWeb.Endpoint.broadcast_from(self(), @topic, "create", %{chat_post: chat_post, id: id})
