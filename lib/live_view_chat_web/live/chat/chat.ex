@@ -9,8 +9,10 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   def mount(_params, _session, socket) do
     user = "User-"<>Chat.random_string(4)
 
+    # Subscribe to Presence.
     Presence.track(self(), @topic, user, %{online_at: inspect(System.system_time(:second))})
 
+    # Subscribe to PubSub.
     LiveViewChatWeb.Endpoint.subscribe(@topic)
 
     changeset = Chat.change_chat_post(%ChatPost{})
@@ -32,20 +34,18 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
     {:noreply, assign(socket, chat_posts: [chat_post], id: id)}
   end
 
-  # Event handler for Presence.
-  def handle_info(%{event: "presence_diff", payload: _payload} = info, socket) do
+  # Handler for Presence.
+  def handle_info(%{event: "presence_diff", payload: payload} = _info, socket) do
     {:noreply, assign(socket, number_of_users: number_of_users())}
   end
 
-  # Event handler for PubSub broadcast_from.
+  # Handler for PubSub broadcast_from.
   def handle_info(%{topic: "chat", payload: %{chat_post: chat_post, id: id}}, socket) do
     {:noreply, assign(socket, chat_posts: [chat_post], id: id)}
   end
 
   # Returns the number of user assigned to a topic.
   defp number_of_users() do
-#    IO.puts("--number_of_users--")
-#    IO.inspect(Presence.list(@topic))
     Presence.list(@topic)
     |> Map.keys()
     |> length()
