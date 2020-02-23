@@ -19,7 +19,7 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
 
     changeset = Chat.change_chat_post(%ChatPost{})
     socket = assign(socket, changeset: changeset, chat_posts: [], user: user, number_of_users: number_of_users())
-   {:ok, socket, temporary_assigns: [chat_posts: []]}
+    {:ok, socket, temporary_assigns: [chat_posts: []]}
   end
 
   def render(assigns) do
@@ -42,7 +42,7 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   end
 
   # Handler for PubSub broadcast_from.
-  def handle_info(%{topic: "chat", payload: %{chat_post: chat_post, id: id}}, socket) do
+  def handle_info(%{topic: @topic, payload: %{chat_post: chat_post, id: id}}, socket) do
     {:noreply, assign(socket, chat_posts: [chat_post], id: id)}
   end
 
