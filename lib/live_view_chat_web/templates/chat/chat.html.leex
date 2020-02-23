@@ -1,29 +1,29 @@
 <h1>WebWeb Chat</h1>
 
 <div class="chat-page">
+  <div phx-update="append" id="chat" class="chat">
+    <%= for chat_post <- @chat_posts do %>
+      <div id="<%= @id %>" class="chat-row">
+        <p><%= chat_post["chat_post"] %></p>
+      </div>
+    <% end %>
+  </div>
 
-    <div phx-update="append" id="chat" class="chat">
-       <%= for chat_post <- @chat_posts do %>
-          <div id="<%= @id %>" class="chat-row">
-            <p><%= chat_post["chat_post"] %></p>
-           </div>
-       <% end %>
-    </div>
-    <div class="chat-form">
-            <%= f = form_for @changeset, "#", [phx_submit: :create, id: "chat-input"] %>
-                <div class="chat-input">
-                    <div class="chat-input-text">
-                        <%= text_input f, :chat_post, id: "chatPost"  %>
-                        <%= hidden_input f, :user, value: @user %>
-                    </div>
-                    <div class="chat-input-submit">
-                        <%= submit "Create", phx_disable_with: "Sending..."%>
-                    </div>
-                </div>
-            </form>
-    </div>
+  <div class="chat-form">
+    <%= f = form_for @changeset, "#", [phx_submit: :create, id: "chat-input"] %>
+      <div class="chat-input">
+        <div class="chat-input-text">
+          <%= text_input f, :chat_post, id: "chatPost"  %>
+          <%= hidden_input f, :user, value: @user %>
+        </div>
+        <div class="chat-input-submit">
+          <%= submit "Create", phx_disable_with: "Sending..."%>
+        </div>
+      </div>
+    </form>
+  </div>
 
-    <div class="users">
-        <p>Number of users on this page: <%= if assigns[:number_of_users] do %> <%= @number_of_users %> <% end %></p>
-    </div>
+  <div class="users">
+    <p>Number of users on this page: <%= if assigns[:number_of_users] do %> <%= @number_of_users %> <% end %></p>
+  </div>
 </div>

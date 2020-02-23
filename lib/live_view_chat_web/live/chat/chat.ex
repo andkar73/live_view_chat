@@ -9,11 +9,13 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   def mount(_params, _session, socket) do
     user = "User-"<>Chat.random_string(4)
 
-    # Subscribe to Presence.
-    Presence.track(self(), @topic, user, %{online_at: inspect(System.system_time(:second))})
+    if connected?(socket) do
+      # Subscribe to Presence.
+      Presence.track(self(), @topic, user, %{online_at: inspect(System.system_time(:second))})
 
-    # Subscribe to PubSub.
-    LiveViewChatWeb.Endpoint.subscribe(@topic)
+      # Subscribe to PubSub.
+      LiveViewChatWeb.Endpoint.subscribe(@topic)
+    end
 
     changeset = Chat.change_chat_post(%ChatPost{})
     socket = assign(socket, changeset: changeset, chat_posts: [], user: user, number_of_users: number_of_users())
@@ -27,7 +29,7 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   # Event handler for Live View
   def handle_event("create", %{"chat_post" => chat_post}, socket) do
     id = Chat.random_string(12)
-    chat_post = Map.replace!(chat_post, "chat_post", chat_post["user"]<>": "<>chat_post["chat_post"])
+    chat_post = Map.replace!(chat_post, "chat_post", "#{chat_post["user"]}: #{chat_post["chat_post"]}")
 
     LiveViewChatWeb.Endpoint.broadcast_from(self(), @topic, "create", %{chat_post: chat_post, id: id})
 
@@ -35,7 +37,7 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   end
 
   # Handler for Presence.
-  def handle_info(%{event: "presence_diff", payload: payload} = _info, socket) do
+  def handle_info(%{event: "presence_diff", payload: _payload} = _info, socket) do
     {:noreply, assign(socket, number_of_users: number_of_users())}
   end
 
