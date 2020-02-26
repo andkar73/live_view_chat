@@ -7,7 +7,7 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   @topic "chat"
 
   def mount(_params, _session, socket) do
-    user = "User-"<>Chat.random_string(4)
+    user = "User-" <> Chat.random_string(4)
 
     if connected?(socket) do
       # Subscribe to Presence.
@@ -18,7 +18,15 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
     end
 
     changeset = Chat.change_chat_post(%ChatPost{})
-    socket = assign(socket, changeset: changeset, chat_posts: [], user: user, number_of_users: number_of_users())
+
+    socket =
+      assign(socket,
+        changeset: changeset,
+        chat_posts: [],
+        user: user,
+        number_of_users: number_of_users()
+      )
+
     {:ok, socket, temporary_assigns: [chat_posts: []]}
   end
 
@@ -29,9 +37,14 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
   # Event handler for Live View
   def handle_event("create", %{"chat_post" => chat_post}, socket) do
     id = Chat.random_string(12)
-    chat_post = Map.replace!(chat_post, "chat_post", "#{chat_post["user"]}: #{chat_post["chat_post"]}")
 
-    LiveViewChatWeb.Endpoint.broadcast_from(self(), @topic, "create", %{chat_post: chat_post, id: id})
+    chat_post =
+      Map.replace!(chat_post, "chat_post", "#{chat_post["user"]}: #{chat_post["chat_post"]}")
+
+    LiveViewChatWeb.Endpoint.broadcast_from(self(), @topic, "create", %{
+      chat_post: chat_post,
+      id: id
+    })
 
     {:noreply, assign(socket, chat_posts: [chat_post], id: id)}
   end
@@ -52,5 +65,4 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
     |> Map.keys()
     |> length()
   end
-
 end

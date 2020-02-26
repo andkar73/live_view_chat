@@ -5,7 +5,7 @@ defmodule LiveViewChat.Chat do
   Create a changeset to change a chat_post.
   Returns a changeset.
   """
-  def change_chat_post(chat_post, changes \\%{}) do
+  def change_chat_post(chat_post, changes \\ %{}) do
     ChatPost.changeset(chat_post, changes)
   end
 
@@ -15,7 +15,6 @@ defmodule LiveViewChat.Chat do
   """
   def random_string(length) do
     alphabet = Enum.to_list(?a..?z) ++ Enum.to_list(?0..?9)
-    for _ <- 1..length, into: "", do: << Enum.random(alphabet) >>
+    for _ <- 1..length, into: "", do: <<Enum.random(alphabet)>>
   end
-
 end

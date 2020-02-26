@@ -7,8 +7,8 @@ defmodule LiveViewChatWeb.Endpoint do
     signing_salt: "ek2XX9RI"
   ]
 
-  socket "/live", Phoenix.LiveView.Socket,
-         websocket: [connect_info: [session: @session_options]]
+  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
+
   socket "/socket", LiveViewChatWeb.UserSocket,
     websocket: true,
     longpoll: false
