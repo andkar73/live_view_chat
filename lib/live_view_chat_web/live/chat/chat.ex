@@ -39,7 +39,7 @@ defmodule LiveViewChatWeb.ChatLive.Chat do
     id = Chat.random_string(12)
 
     chat_post =
-      Map.replace!(chat_post, "chat_post", "#{chat_post["user"]}: #{chat_post["chat_post"]}")
+      Map.replace!(chat_post, "chat_post", "#{socket.assigns.user}: #{chat_post["chat_post"]}")
 
     LiveViewChatWeb.Endpoint.broadcast_from(self(), @topic, "create", %{
       chat_post: chat_post,
